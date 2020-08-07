@@ -12,9 +12,10 @@ import (
 )
 
 type Terraform struct {
-	execPath   string
-	workingDir string
-	env        map[string]string
+	execPath        string
+	workingDir      string
+	appendUserAgent string
+	env             map[string]string
 
 	logger  *log.Logger
 	logPath string
@@ -80,6 +81,12 @@ func (tf *Terraform) SetLogger(logger *log.Logger) {
 func (tf *Terraform) SetLogPath(path string) error {
 	tf.logPath = path
 	return nil
+}
+
+// SetAppendUserAgent sets the TF_APPEND_USER_AGENT environment variable for
+// Terraform CLI execution.
+func (tf *Terraform) SetAppendUserAgent(ua string) {
+	tf.appendUserAgent = ua
 }
 
 // WorkingDir returns the working directory for Terraform.

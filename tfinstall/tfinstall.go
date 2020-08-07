@@ -15,6 +15,8 @@ import (
 	"github.com/hashicorp/go-getter"
 	"github.com/hashicorp/go-version"
 	"golang.org/x/crypto/openpgp"
+
+	intversion "github.com/hashicorp/terraform-exec/internal/version"
 )
 
 const baseUrl = "https://releases.hashicorp.com/terraform"
@@ -164,7 +166,7 @@ func downloadWithVerification(tfVersion string, installDir string) (string, erro
 
 	// setup: getter client
 	httpHeader := make(http.Header)
-	httpHeader.Set("User-Agent", "HashiCorp-tfinstall/"+Version)
+	httpHeader.Set("User-Agent", "HashiCorp-tfinstall/"+intversion.ModuleVersion())
 	httpGetter := &getter.HttpGetter{
 		Netrc: true,
 	}
