@@ -1,9 +1,9 @@
 package tfinstall
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
-	"net/http"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -13,7 +13,7 @@ import (
 	"golang.org/x/crypto/openpgp"
 )
 
-func downloadWithVerification(tfVersion string, installDir string) (string, error) {
+func downloadWithVerification(ctx context.Context, tfVersion string, installDir string) (string, error) {
 	osName := runtime.GOOS
 	archName := runtime.GOARCH
 
@@ -30,16 +30,19 @@ func downloadWithVerification(tfVersion string, installDir string) (string, erro
 			return "", fmt.Errorf("could not access directory %s for installing Terraform: %s", installDir, err)
 		}
 		tfDir = installDir
-
 	}
 
 	// setup: getter client
-	httpHeader := make(http.Header)
-	httpHeader.Set("User-Agent", "HashiCorp-tfinstall/"+Version)
+
+	// TODO: actually use this header...
+	// httpHeader := make(http.Header)
+	// httpHeader.Set("User-Agent", "HashiCorp-tfinstall/"+Version)
+
 	httpGetter := &getter.HttpGetter{
 		Netrc: true,
 	}
 	client := getter.Client{
+		Ctx: ctx,
 		Getters: map[string]getter.Getter{
 			"https": httpGetter,
 		},
