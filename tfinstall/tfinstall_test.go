@@ -1,6 +1,7 @@
 package tfinstall
 
 import (
+	"context"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -11,13 +12,15 @@ import (
 // test that Find falls back to the next working strategy when the file at
 // ExactPath does not exist
 func TestFindFallback(t *testing.T) {
+	ctx := context.Background()
+
 	tmpDir, err := ioutil.TempDir("", "tfinstall-test")
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer os.RemoveAll(tmpDir)
 
-	tfpath, err := Find(ExactPath("/hopefully/completely/nonexistent/path"), ExactVersion("0.12.26", tmpDir))
+	tfpath, err := Find(ctx, ExactPath("/hopefully/completely/nonexistent/path"), ExactVersion("0.12.26", tmpDir))
 	if err != nil {
 		t.Fatal(err)
 	}

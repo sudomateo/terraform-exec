@@ -1,6 +1,7 @@
 package tfinstall
 
 import (
+	"context"
 	"fmt"
 	"os/exec"
 	"strings"
@@ -10,13 +11,15 @@ import (
 // test that Find returns an appropriate error when given an exact path
 // which exists, but is not a terraform executable
 func TestExactPath(t *testing.T) {
+	ctx := context.Background()
+
 	// we just want the path to a local executable that definitely exists
 	execPath, err := exec.LookPath("go")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	_, err = Find(ExactPath(execPath))
+	_, err = Find(ctx, ExactPath(execPath))
 	if err == nil {
 		t.Fatalf("expected Find() to fail when given ExactPath(%s), but it did not", execPath)
 	}

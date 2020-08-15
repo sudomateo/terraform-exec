@@ -1,6 +1,7 @@
 package tfinstall
 
 import (
+	"context"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -13,6 +14,7 @@ import (
 // latest version calculation itself is handled by checkpoint, so the test can be straightforward -
 // just test that we've managed to download a version of terraform later than 0.12.27
 func TestLatestVersion(t *testing.T) {
+	ctx := context.Background()
 	lowerBound := "0.12.27"
 
 	tmpDir, err := ioutil.TempDir("", "tfinstall-test")
@@ -21,7 +23,7 @@ func TestLatestVersion(t *testing.T) {
 	}
 	defer os.RemoveAll(tmpDir)
 
-	tfpath, err := Find(LatestVersion(tmpDir, false))
+	tfpath, err := Find(ctx, LatestVersion(tmpDir, false))
 	if err != nil {
 		t.Fatal(err)
 	}

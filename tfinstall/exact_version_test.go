@@ -1,6 +1,7 @@
 package tfinstall
 
 import (
+	"context"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -10,13 +11,15 @@ import (
 
 // downloads terraform 0.12.26 from the live releases site
 func TestFindExactVersion(t *testing.T) {
+	ctx := context.Background()
+
 	tmpDir, err := ioutil.TempDir("", "tfinstall-test")
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer os.RemoveAll(tmpDir)
 
-	tfpath, err := Find(ExactVersion("0.12.26", tmpDir))
+	tfpath, err := Find(ctx, ExactVersion("0.12.26", tmpDir))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -38,13 +41,15 @@ func TestFindExactVersion(t *testing.T) {
 
 // downloads terraform 0.13.0-beta1 from the live releases site
 func TestFindExactVersionPrerelease(t *testing.T) {
+	ctx := context.Background()
+
 	tmpDir, err := ioutil.TempDir("", "tfinstall-test")
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer os.RemoveAll(tmpDir)
 
-	tfpath, err := Find(ExactVersion("0.13.0-beta1", tmpDir))
+	tfpath, err := Find(ctx, ExactVersion("0.13.0-beta1", tmpDir))
 	if err != nil {
 		t.Fatal(err)
 	}
